@@ -3,6 +3,7 @@ package VascoPanigi;
 import VascoPanigi.dao.EventsDAO;
 import VascoPanigi.entities.Event;
 import VascoPanigi.enums.EventType;
+import VascoPanigi.exceptions.EventNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -15,8 +16,25 @@ public class Application {
     public static void main(String[] args) {
         EntityManager em = emf.createEntityManager();
         EventsDAO sd = new EventsDAO(em);
-        Event eventone = new Event(500, EventType.PUBLIC, "prevendite spazio", LocalDate.of(2020, 5, 13), "seratona spazio lascia perde oo");
+        Event event1 = new Event(5, EventType.PRIVATE, "dinner with obama", LocalDate.of(2024, 5, 13), "dinner");
+        Event event2 = new Event(300, EventType.PUBLIC, "stare at walls session", LocalDate.of(2029, 5, 13), "stare a wall together");
 
-        sd.save(eventone);
+//        sd.save(event1);
+//        sd.save(event2);
+
+        try {
+            Event event = sd.findById(252);
+            System.out.println(event);
+        } catch (EventNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        try {
+            sd.findByIdAndDelete(303);
+            System.out.println("Event eliminated. :(");
+        } catch (EventNotFoundException ex) {
+            System.out.println(ex.getMessage());
+        }
+
     }
 }
